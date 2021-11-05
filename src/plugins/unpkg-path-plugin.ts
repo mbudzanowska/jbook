@@ -46,16 +46,17 @@ export const unpkgPathPlugin = () => {
         }
 
         // check to see if we have already cached this file
-        const cachedResult = await fileCache.getItem(args.path);
+        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
+          args.path
+        );
         // if it is, return immediately
         if (cachedResult) {
           return cachedResult;
         }
 
         // if not, download and cache
-
         const { data, request } = await axios.get(args.path);
-        const result = {
+        const result: esbuild.OnLoadResult = {
           loader: "jsx",
           contents: data,
           resolveDir: new URL("./", request.responseURL).pathname,
