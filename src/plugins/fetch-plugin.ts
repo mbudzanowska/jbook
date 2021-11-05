@@ -18,19 +18,22 @@ export const fetchPlugin = (inputCode: string) => {
           };
         }
 
-        // check to see if we have already cached this file
-        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
-          args.path
-        );
-        // if it is, return immediately
-        if (cachedResult) {
-          return cachedResult;
-        }
+        // // check to see if we have already cached this file
+        // const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
+        //   args.path
+        // );
+        // // if it is, return immediately
+        // if (cachedResult) {
+        //   return cachedResult;
+        // }
 
         // if not, download and cache
         const { data, request } = await axios.get(args.path);
+
+        const loader = args.path.match(/.css$/) ? "css" : "jsx";
+
         const result: esbuild.OnLoadResult = {
-          loader: "jsx",
+          loader,
           contents: data,
           resolveDir: new URL("./", request.responseURL).pathname,
         };
