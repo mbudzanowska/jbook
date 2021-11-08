@@ -1,4 +1,4 @@
-import './resizable.css'
+import "./resizable.css";
 import { ResizableBox } from "react-resizable";
 
 interface ResizableProps {
@@ -7,7 +7,13 @@ interface ResizableProps {
 
 const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
   return (
-    <ResizableBox width={Infinity} height={300} resizeHandles={["s"]}>
+    <ResizableBox
+      minConstraints={[Infinity, 24]}
+      maxConstraints={[Infinity, window.innerHeight * 0.9]}
+      width={Infinity}
+      height={300}
+      resizeHandles={["s"]}
+    >
       {children}
     </ResizableBox>
   );
