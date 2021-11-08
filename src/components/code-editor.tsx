@@ -1,7 +1,12 @@
-import Editor from "@monaco-editor/react";
+import "./code-editor.css";
+import "./syntax.css";
+import Editor, { OnMount } from "@monaco-editor/react";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
-import "./code-editor.css";
+import { parse } from "@babel/parser";
+import traverse from "@babel/traverse";
+import Highlighter from "monaco-jsx-highlighter";
+
 interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;
@@ -13,14 +18,33 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange }) => {
   };
 
   const onFormatClick = () => {
-    const formattedCode = prettier.format(value, {
-      parser: "babel",
-      plugins: [parser],
-      useTabs: false,
-      semi: true,
-      singleQuote: true,
-    }).replace(/\n$/, "");
+    const formattedCode = prettier
+      .format(value, {
+        parser: "babel",
+        plugins: [parser],
+        useTabs: false,
+        semi: true,
+        singleQuote: true,
+      })
+      .replace(/\n$/, "");
     onChange(formattedCode);
+  };
+
+  const bulmaParse = (code: string) =>
+    parse(code, {
+      sourceType: "module",
+      plugins: ["jsx"],
+    });
+
+  const onEditorDidMount: OnMount = (editor) => {
+    const highlighter = new Highlighter(
+      //@ts-ignore
+      window.monaco,
+      bulmaParse,
+      traverse,
+      editor
+    );
+    highlighter.highLightOnDidChangeModelContent(100);
   };
 
   return (
@@ -32,6 +56,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange }) => {
         Format
       </button>
       <Editor
+        onMount={onEditorDidMount}
         onChange={onEditorChange}
         defaultValue=""
         value={value}
