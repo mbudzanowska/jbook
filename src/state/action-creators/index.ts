@@ -5,13 +5,11 @@ import {
   DeleteCellAction,
   MoveCellAction,
   InsertCellAfterAction,
-  BundleCompleteAction,
-  BundleStartAction,
   Direction,
   Action,
 } from "../actions";
 import { CellTypes } from "../cell";
-import bundle from "../../bundler";
+import { bundle } from "../../bundler";
 
 export const updateCell = (id: string, content: string): UpdateCellAction => {
   return {

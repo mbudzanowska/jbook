@@ -4,14 +4,20 @@ import { fetchPlugin } from "./plugins/fetch-plugin";
 
 let initialized = false;
 
-const bundle = async (rawCode: string) => {
+export const initialize = async () => {
+  await esbuild.initialize({
+    worker: true,
+    wasmURL: "https://unpkg.com/esbuild-wasm@0.13.12/esbuild.wasm",
+  });
+  initialized = true;
+};
 
+export const bundle = async (rawCode: string) => {
   if (!initialized) {
-    initialized = true;
-    await esbuild.initialize({
-      worker: true,
-      wasmURL: "https://unpkg.com/esbuild-wasm@0.13.12/esbuild.wasm",
-    });
+    return {
+      code: "",
+      err: "Esbuild not yet initialized",
+    };
   }
 
   try {
@@ -33,5 +39,3 @@ const bundle = async (rawCode: string) => {
     };
   }
 };
-
-export default bundle;

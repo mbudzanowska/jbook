@@ -57,7 +57,6 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
       state.data[cell.id] = cell;
 
       const index = state.order.findIndex((idx) => idx === id);
-      console.log(index);
       if (index < 0) {
         state.order.unshift(cell.id);
       } else {
