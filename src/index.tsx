@@ -11,7 +11,10 @@ import { initialize } from "./bundler";
 
 const App = () => {
   useEffect(() => {
-    initialize();
+    const init = async ( )=> {
+      await initialize();
+    }
+    init();
   }, []);
 
   return (

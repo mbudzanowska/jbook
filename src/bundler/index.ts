@@ -16,10 +16,9 @@ export const bundle = async (rawCode: string) => {
   if (!initialized) {
     return {
       code: "",
-      err: "Esbuild not yet initialized",
+      err: ""
     };
   }
-
   try {
     const result = await esbuild.build({
       entryPoints: ["index.js"],
